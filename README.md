@@ -1,6 +1,3 @@
-# Orcamento-pessoal
-Estudo de Javascript de desenvolvimento de aplicação WEB | App Orçamento Pessoal
-
 <h1 align="center">Orçamento Pessoal</h1>
 
 <p>:man_student: Estudando Javascript</p>
