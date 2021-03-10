@@ -17,6 +17,16 @@ class Despesa {
     DOM.modalSucesso();
     $("#modalMessage").modal("show");
   }
+
+  limparDadosForm(ano, mes, dia, tipo, descricao, valor){
+    ano.value = ''
+    mes.value = ''
+    dia.value = ''
+    tipo.value = ''
+    descricao.value = ''
+    valor.value = ''
+  }
+  
 }
 
 const DOM = {
@@ -56,7 +66,7 @@ const DOM = {
                 <div class="modal-body">
                 Por favor preencha todos os campos
                 </div>
-                <div class="modal-footer">
+                  <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Voltar</button>
                 </div>
             </div>
@@ -99,6 +109,10 @@ class Bd {
     }
     return despesas
   }
+
+  pesquisar(despesa){
+
+  }
 }
 
 let bd = new Bd();
@@ -123,6 +137,9 @@ function cadastrarDespesa() {
     // validar campos
     despesa.validarDados();
 
+    // limpar dados no form
+    despesa.limparDadosForm(ano, mes, dia, tipo, descricao, valor)
+
     // gravar campos no LocalStorage
     bd.gravar(despesa);
   } catch (error) {
@@ -135,5 +152,42 @@ function carregaListaDespesas(){
   let despesas = []
   despesas = bd.recuperarTodosRegistros()
 
-  console.log(despesas)
+  // selecionado o elemento tbody na tabela
+  var listaDespesas = document.getElementById('listaDespesas')
+
+/*   <td>${despesa.dia}/${despesa.mes}/${despesa.ano}</td>
+  <td>${despesa.tipo}</td>
+  <td>${despesa.ano}</td>
+  <td>${despesa.ano}</td> */
+
+  despesas.forEach((despesa)=>{
+    // criar a linha tr
+    let linha = listaDespesas.insertRow()
+
+    // criar as colunas td
+    linha.insertCell(0).innerHTML = `<td>${despesa.dia}/${despesa.mes}/${despesa.ano}</td>`
+    linha.insertCell(1).innerHTML = `<td>${despesa.tipo}</td>`
+    linha.insertCell(2).innerHTML = `<td>${despesa.descricao}</td>`
+    linha.insertCell(3).innerHTML = `<td>${despesa.valor}</td> `
+  })
+
+}
+
+function pesquisarDespesa(){
+  let ano = document.getElementById("ano").value;
+  let mes = document.getElementById("mes").value;
+  let dia = document.getElementById("dia").value;
+  let tipo = document.getElementById("tipo").value;
+  let descricao = document.getElementById("descricao").value;
+  let valor = document.getElementById("valor").value;
+
+  let despesa = new Despesa(
+    ano,
+    mes,
+    dia,
+    tipo,
+    descricao,
+    valor,
+  );
+  bd.pesquisar(despesa)
 }

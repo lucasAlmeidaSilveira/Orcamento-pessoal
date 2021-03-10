@@ -11,7 +11,7 @@
     integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
   <!-- Favicon Icon -->
-  <link rel="shortcut icon" href="./assets/img/favicon.png" type="image/x-icon">
+  <link rel="shortcut icon" href="./assets/img/logo.svg" type="image/x-icon">
 
   <!-- Font Awesome -->
   <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
@@ -27,7 +27,7 @@
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-5">
     <div class="container">
       <a class="navbar-brand" href="#">
-        <img src="./assets/img/logo.png" width="50" height="35" alt="Orçamento pessoal">
+        <img src="./assets/img/logo.svg" width="50" height="35" alt="Orçamento pessoal">
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,7 +87,7 @@
 
       <div class="col-md-6">
         <select class="form-control" id="tipo">
-          <option>Tipo</option>
+          <option value="">Tipo</option>
           <option value="1">Alimentação</option>
           <option value="2">Educação</option>
           <option value="3">Lazer</option>
@@ -107,7 +107,7 @@
       </div>
 
       <div class="col-md-2 d-flex justify-content-end">
-        <button type="button" class="btn btn-primary">
+        <button type="button" class="btn btn-primary" onclick="pesquisarDespesa()">
           <i class="fas fa-search"></i>
         </button>
       </div>
@@ -126,7 +126,7 @@
             </tr>
           </thead>
 
-          <tbody>
+          <tbody id="listaDespesas">
           </tbody>
         </table>
       </div>
