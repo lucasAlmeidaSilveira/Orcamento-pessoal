@@ -1,8 +1,6 @@
 class Despesa {
-  constructor(ano, mes, dia, tipo, descricao, valor) {
-    this.ano = ano;
-    this.mes = mes;
-    this.dia = dia;
+  constructor(date, tipo, descricao, valor) {
+    this.date = date;
     this.tipo = tipo;
     this.descricao = descricao;
     this.valor = valor;
@@ -17,16 +15,6 @@ class Despesa {
     DOM.modalSucesso();
     $("#modalMessage").modal("show");
   }
-
-  limparDadosForm(ano, mes, dia, tipo, descricao, valor){
-    ano.value = ''
-    mes.value = ''
-    dia.value = ''
-    tipo.value = ''
-    descricao.value = ''
-    valor.value = ''
-  }
-  
 }
 
 const DOM = {
@@ -96,98 +84,180 @@ class Bd {
     localStorage.setItem("id", id);
   }
 
-  recuperarTodosRegistros(){
-    let id = localStorage.getItem('id')
-    let despesas = []
+  recuperarTodosRegistros() {
+    let id = localStorage.getItem("id");
+    let despesas = [];
     // recuperar todas as despesas armazenadas em localStorage
-    for(let i = 1; i <= id; i++){
-      let despesa = JSON.parse(localStorage.getItem(i))
-      if(despesa === null){
-        continue
+    for (let i = 1; i <= id; i++) {
+      let despesa = JSON.parse(localStorage.getItem(i));
+      if (despesa === null) {
+        continue;
       }
-      despesas.push(despesa)
+      despesa.id = i
+      despesas.push(despesa);
     }
-    return despesas
+    return despesas;
   }
 
-  pesquisar(despesa){
+  pesquisar(despesa) {
+    let despesasFiltradas = []
+    despesasFiltradas = this.recuperarTodosRegistros()
 
+    // date
+    if(despesa.date != ''){
+      despesasFiltradas = despesasFiltradas.filter( d => d.date == despesa.date)
+    }
+    // tipo
+    if(despesa.tipo != ''){
+      despesasFiltradas = despesasFiltradas.filter( d => d.tipo == despesa.tipo)
+    }
+    //descricao
+    if(despesa.descricao != ''){
+      despesasFiltradas = despesasFiltradas.filter( d => d.descricao == despesa.descricao)
+    }
+    //valor
+    if(despesa.valor != ''){
+      despesasFiltradas = despesasFiltradas.filter( d => d.valor == despesa.valor)
+    }
+    return despesasFiltradas
+  }
+
+  remover(id){
+    id = id.replace('idDespesa-', '')
+    localStorage.removeItem(id)
+    window.location.reload()
   }
 }
 
 let bd = new Bd();
 
-function cadastrarDespesa() {
-  let ano = document.getElementById("ano");
-  let mes = document.getElementById("mes");
-  let dia = document.getElementById("dia");
-  let tipo = document.getElementById("tipo");
-  let descricao = document.getElementById("descricao");
-  let valor = document.getElementById("valor");
+const Form = {
+  descricao: document.getElementById("descricao"),
+  tipo: document.getElementById("tipo"),
+  date: document.getElementById("date"),
+  valor: document.getElementById("valor"),
 
-  let despesa = new Despesa(
-    ano.value,
-    mes.value,
-    dia.value,
-    tipo.value,
-    descricao.value,
-    valor.value,
-  );
-  try {
-    // validar campos
-    despesa.validarDados();
+  getValues() {
+    return {
+      descricao: this.descricao.value,
+      tipo: this.tipo.value,
+      date: this.date.value,
+      valor: this.valor.value,
+    };
+  },
 
-    // limpar dados no form
-    despesa.limparDadosForm(ano, mes, dia, tipo, descricao, valor)
+  /* formatValues() {
+    let { descricao, tipo, date, valor } = this.getValues();
 
-    // gravar campos no LocalStorage
-    bd.gravar(despesa);
-  } catch (error) {
-    DOM.modalErro();
+    //date = Formatting.formatDate(date);
+
+    //valor = Formatting.formatValue(valor)
+    return {
+      descricao,
+      tipo,
+      date,
+      valor,
+    };
+  }, */
+
+  validarDados() {
+    for (let i in this) {
+      if (this[i] == undefined || this[i] == "" || this[i] == null) {
+        throw new Error();
+      }
+    }
+    DOM.modalSucesso();
     $("#modalMessage").modal("show");
-  }
-}
+  },
 
-function carregaListaDespesas(){
-  let despesas = []
-  despesas = bd.recuperarTodosRegistros()
+  clearFields() {
+    this.descricao.value = "";
+    this.tipo.value = "";
+    this.date.value = "";
+    this.valor.value = "";
+  },
+
+  submit() {
+    try {
+      // verificar campos
+      this.validarDados();
+
+      // formatar os dados
+      const despesa = this.getValues();
+
+      // apagar os dados do formulário
+      this.clearFields();
+
+      // salvar no localStorage
+      bd.gravar(despesa);
+    } catch (error) {
+      DOM.modalErro();
+      $("#modalMessage").modal("show");
+    }
+  },
+};
+
+const Formatting = {
+  formatDate(date) {
+    const dateFormated = date.split("-");
+    return `${dateFormated[2]}/${dateFormated[1]}/${dateFormated[0]}`;
+  },
+
+  formatCurrency(value) {
+    value = value.replace(/[^\d]+/g, ".");
+    value = Number(value); /// 100
+    value = value.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    });
+    return value;
+  },
+};
+
+const App = {};
+
+// mostrar despesas na consulta
+function carregaListaDespesas(despesas = [], filtro = false) {
+  if(despesas.length == 0 && filtro == false){
+    despesas = bd.recuperarTodosRegistros();
+  }
+
 
   // selecionado o elemento tbody na tabela
-  var listaDespesas = document.getElementById('listaDespesas')
+  var listaDespesas = document.getElementById("listaDespesas");
+  listaDespesas.innerHTML = ''
 
-/*   <td>${despesa.dia}/${despesa.mes}/${despesa.ano}</td>
-  <td>${despesa.tipo}</td>
-  <td>${despesa.ano}</td>
-  <td>${despesa.ano}</td> */
 
-  despesas.forEach((despesa)=>{
+  despesas.forEach((despesa) => {
     // criar a linha tr
-    let linha = listaDespesas.insertRow()
+    let linha = listaDespesas.insertRow();
 
     // criar as colunas td
-    linha.insertCell(0).innerHTML = `<td>${despesa.dia}/${despesa.mes}/${despesa.ano}</td>`
-    linha.insertCell(1).innerHTML = `<td>${despesa.tipo}</td>`
-    linha.insertCell(2).innerHTML = `<td>${despesa.descricao}</td>`
-    linha.insertCell(3).innerHTML = `<td>${despesa.valor}</td> `
-  })
+    linha.insertCell(0).innerHTML = despesa.descricao;
+    linha.insertCell(1).innerHTML = despesa.tipo;
+    linha.insertCell(2).innerHTML = Formatting.formatDate(despesa.date);
+    linha.insertCell(3).innerHTML = Formatting.formatCurrency(despesa.valor);
 
+    // criar o botão de delete despesa
+    let btn = document.createElement('button')
+    btn.className = 'btn btn-danger'
+    btn.innerHTML = '<i class = "fas fa-times"></i>'
+    btn.id = `idDespesa-${despesa.id}`
+    btn.onclick = function(){
+      bd.remover(this.id)
+    }
+    linha.insertCell(4).append(btn)
+    console.log(despesa)
+  });
 }
 
-function pesquisarDespesa(){
-  let ano = document.getElementById("ano").value;
-  let mes = document.getElementById("mes").value;
-  let dia = document.getElementById("dia").value;
+function pesquisarDespesa() {
+  let date = document.getElementById("date").value;
   let tipo = document.getElementById("tipo").value;
   let descricao = document.getElementById("descricao").value;
   let valor = document.getElementById("valor").value;
 
-  let despesa = new Despesa(
-    ano,
-    mes,
-    dia,
-    tipo,
-    descricao,
-    valor,
-  );
-  bd.pesquisar(despesa)
+  let despesa = new Despesa(date, tipo, descricao, valor);
+  let despesas = bd.pesquisar(despesa);
+  carregaListaDespesas(despesas, true)
 }

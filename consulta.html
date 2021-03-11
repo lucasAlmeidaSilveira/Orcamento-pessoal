@@ -26,7 +26,8 @@
 
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-5">
     <div class="container">
-      <a class="navbar-brand" href="#">
+      <a class="navbar-brand" href="#" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <img src="./assets/img/logo.svg" width="50" height="35" alt="Orçamento pessoal">
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -56,7 +57,10 @@
     </div>
 
     <div class="row mb-2">
-      <div class="col-md-2">
+      <div class="col-md-6">
+        <input type="date" id="date" name="date" class="form-control">
+      </div>
+      <!-- <div class="col-md-2">
         <select class="form-control" id="ano">
           <option value="">Ano</option>
           <option value="2018">2018</option>
@@ -83,16 +87,16 @@
 
       <div class="col-md-2">
         <input type="text" class="form-control" placeholder="Dia" id="dia" />
-      </div>
+      </div> -->
 
       <div class="col-md-6">
         <select class="form-control" id="tipo">
-          <option value="">Tipo</option>
-          <option value="1">Alimentação</option>
-          <option value="2">Educação</option>
-          <option value="3">Lazer</option>
-          <option value="4">Saúde</option>
-          <option value="5">Transporte</option>
+          <option value="">Tudo</option>
+          <option value="Alimentação">Alimentação</option>
+          <option value="Educação">Educação</option>
+          <option value="Lazer">Lazer</option>
+          <option value="Saúde">Saúde</option>
+          <option value="Transporte">Transporte</option>
         </select>
       </div>
     </div>
@@ -118,9 +122,9 @@
         <table class="table">
           <thead>
             <tr>
-              <th>Data</th>
-              <th>Tipo</th>
               <th>Descrição</th>
+              <th>Tipo</th>
+              <th>Data</th>
               <th>Valor</th>
               <th></th>
             </tr>
