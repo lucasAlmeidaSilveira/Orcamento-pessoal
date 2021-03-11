@@ -3,7 +3,8 @@
 <p>:man_student: Estudando Javascript</p>
 
 <h2>Tela de Início</h2>
-![image](https://user-images.githubusercontent.com/72694905/110866435-e351c880-82a3-11eb-9acc-8b2635091a4b.png)
+![image](https://user-images.githubusercontent.com/72694905/110866614-2a3fbe00-82a4-11eb-856f-d70dc7539a7b.png)
+
 
 ## :rocket: Funcionalidades
 - Adicionando despesas no localStorage;
