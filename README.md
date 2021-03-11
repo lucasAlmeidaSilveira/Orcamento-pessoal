@@ -1,17 +1,22 @@
 <h1 align="center">:moneybag: Orçamento Pessoal :moneybag:</h1>
 
 <p>:man_student: Estudando Javascript</p>
-<p>🔨: Em Desenvolvimento</p>
 
 <h2>Tela de Início</h2>
+![image](https://user-images.githubusercontent.com/72694905/110866435-e351c880-82a3-11eb-9acc-8b2635091a4b.png)
 
 ## :rocket: Funcionalidades
+- Adicionando despesas no localStorage;
+- Consulta de despesas usando o localStorage;
+- Uso de class e objetos literais;
+- Filtro de pesquisa
 
 ## 🛠 Technology
 
-- HTML
-- CSS
-- JAVASCRIPT
+- HTML;
+- CSS;
+- JAVASCRIPT;
+- Framework Bootstrap.
 
 ## :man_technologist: Autor
 <a href="https://github.com/lucasAlmeidaSilveira">Lucas Almeida</a>
