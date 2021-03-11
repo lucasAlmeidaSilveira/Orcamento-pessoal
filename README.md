@@ -3,7 +3,8 @@
 <p>:man_student: Estudando Javascript</p>
 
 <h2>Tela de Início</h2>
-![image](https://user-images.githubusercontent.com/72694905/110866614-2a3fbe00-82a4-11eb-856f-d70dc7539a7b.png)
+
+![image](https://user-images.githubusercontent.com/72694905/110866701-52c7b800-82a4-11eb-87fd-0504d6c27dce.png)
 
 
 ## :rocket: Funcionalidades
